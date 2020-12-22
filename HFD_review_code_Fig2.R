@@ -18,8 +18,8 @@ library(scales)
 HFD_reviewdata$Diet_cat <- as.factor(HFD_reviewdata$Diet_cat)
 # plotting how duration differs by HFD model
 p <- ggplot(HFD_reviewdata, aes(x=wk_diff, y=Diet_cat, color=Disease)) + 
-  geom_boxplot(outlier.colour="black") + scale_color_manual(values=c("#fd8d3c","#d94801", "#7f2704"))+
-  geom_point(position=position_dodge(width=0.75),aes(fill=Disease), size=3) +
+  geom_boxplot(outlier.size=3) + scale_color_manual(values=c("#fd8d3c","#d94801", "#7f2704"))+
+  geom_point(position=position_jitterdodge(jitter.width = 0.2, dodge.width = 0.9), aes(fill=Disease), size=3) +
   coord_flip() 
 p
 p <- p + ylab('HFD % Fat kCal') +
@@ -30,8 +30,8 @@ p
 #geom_jitter(shape=16, size=3, position=position_jitter(0.5))
 #plotting how %HFD differs by disease model
 m <- ggplot(HFD_reviewdata, aes(x=Diet_description, y=Disease, color=Disease)) + 
-  geom_boxplot(outlier.colour="black") + scale_color_manual(values=c("#fd8d3c","#d94801", "#7f2704"))+
-  geom_point(position=position_dodge(width=0.75),aes(color=Disease), size=3) +
+  geom_boxplot(outlier.size=3) + scale_color_manual(values=c("#fd8d3c","#d94801", "#7f2704"))+
+  geom_point(position=position_jitterdodge(jitter.width = 0.2, dodge.width = 0.9),aes(color=Disease), size=3) +
   coord_flip() 
 m
 m <- m + ylab('Disease Model') +
@@ -41,8 +41,8 @@ m
 #plotting how age start differs by disease model
 HFD_reviewdata$age_start_wks
 r <- ggplot(HFD_reviewdata, aes(x=age_start_wks, y=Disease, color=Disease)) + 
-  geom_boxplot(outlier.colour="black") +scale_color_manual(values=c("#fd8d3c","#d94801", "#7f2704")) +
-  geom_point(position=position_dodge(width=0.75),aes(fill=Disease), size=3) +
+  geom_boxplot(outlier.size=3) +scale_color_manual(values=c("#fd8d3c","#d94801", "#7f2704")) +
+  geom_point(position=position_jitterdodge(jitter.width = 0.2, dodge.width = 0.9),aes(fill=Disease), size=3) +
   coord_flip() 
 r
 r <- r + ylab('Disease Model') +
@@ -56,7 +56,7 @@ x3 <- HFD_reviewdata[order(HFD_reviewdata$Disease, HFD_reviewdata$age_start_wks)
 t <-ggplot(transform(x3, y=order(Disease, age_start_wks)),
            aes(x=age_start_wks, xend=age_end_wks, y=y, yend=y, color=Disease)) + scale_color_manual(values=c("#fd8d3c","#d94801", "#7f2704"))+
   geom_segment(size=3) + 
-  scale_y_discrete(breaks=NULL)
+  scale_y_discrete(breaks=NULL) 
 t
 t <- t + ylab('Disease Model') +
   xlab('Timeline Diet Treatment (Age in Weeks)') +
@@ -94,7 +94,7 @@ p2
 #make column graphing sex and disease model
 agg <- count(HFD_reviewdata, Disease, Sex)
 head(agg)
-ecols <- c(Females="#08519c",  Males = "#4292c6", Both = "black", 'Not Specified' = "grey")
+ecols <- c(Females="#08519c",  Males = "#4292c6", Both = "black", 'Not specified' = "grey")
 hfd_ord <- mutate(agg,
                   Disease = reorder(Disease, -n, sum),
                   Sex = reorder(Sex, -n, sum))
@@ -146,4 +146,6 @@ blank_theme <- theme_minimal()+
 pie + scale_fill_manual(values=c("grey76", "#4292c6")) + blank_theme +
   theme(axis.text.x=element_blank()) +
   theme(text = element_text(size = 18)) +
-  geom_text(aes(y = n/2, label = percent(n/62)), size=8)
+  geom_text(aes(y = n/2, label = percent(n/66)), size=8)
+
+#N's on the figure were done by hand
